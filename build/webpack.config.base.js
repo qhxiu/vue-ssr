@@ -1,0 +1,55 @@
+const path = require('path')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const createVueLoaderOptions = require('./vue-loader.config')
+
+const isDev = process.env.NODE_ENV === 'development'
+const config = {
+  target: 'web',
+  entry: path.join(__dirname, '../client/index.js'),
+  output: {
+    filename: 'bundle.js',
+    path: path.join(__dirname, '../dist')
+  },
+  plugins: [new VueLoaderPlugin()],
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx|vue)$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+        enforce: 'pre'
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.jsx$/,
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: path.join(__dirname, 'node_modules'),
+        include: path.join(__dirname, 'client'),
+        options: {
+          presets: ['env']
+        }
+      },
+      {
+        test: /\.(gif|jpg|jpeg|png|svg)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 1024,
+              name: 'resouces/[path][name]-[hash:8].[ext]'
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+
+module.exports = config
