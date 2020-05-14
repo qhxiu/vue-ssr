@@ -2,7 +2,11 @@
   <div id="app">
     <div id="cover"></div>
     <Header></Header>
-    <todo></todo>
+    <transition name="fade">
+      <router-view></router-view>
+    </transition>
+    <button @click="notify"></button>
+    <!-- <notification content="test notification"/> -->
     <Footer></Footer>
   </div>
 </template>
@@ -13,6 +17,9 @@ import Footer from './layout/footer.jsx'
 import Todo from './views/todo/todo.vue'
 
 export default {
+  metaInfo: {
+    title: 'qhx\'s Todo App'
+  },
   components: {
     Header,
     Footer,
@@ -20,6 +27,19 @@ export default {
   },
   data () {
     return {}
+  },
+  mounted () {
+
+  },
+  methods: {
+    notify () {
+      // eslint-disable-next-line no-debugger
+      debugger
+      this.$notify({
+        content: 'test $notify',
+        btn: 'close'
+      })
+    }
   }
 }
 </script>

@@ -1,92 +1,100 @@
-const path = require("path");
-const webpack = require("webpack");
-// 合并webpack配置
-const merge = require("webpack-merge");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HTMLPlugin = require("html-webpack-plugin");
-const baseConfig = require("./webpack.config.base");
-const createVueLoaderOptions = require("./vue-loader.config");
+const path = require('path')
+const webpack = require('webpack')
+const merge = require('webpack-merge')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const HTMLPlugin = require('html-webpack-plugin')
+const baseConfig = require('./webpack.config.base')
+const VueClientPlugin = require('vue-server-renderer/client-plugin')
 
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === 'development'
 const defaultPlugin = [
   new webpack.DefinePlugin({
-    "process.env": {
-      NODE_ENV: isDev ? '"development"' : '"production"',
-    },
+    'process.env': {
+      NODE_ENV: isDev ? '"development"' : '"production"'
+    }
   }),
-  new HTMLPlugin(),
-];
+  new HTMLPlugin({
+    template: path.join(__dirname, 'template.html')
+  }),
+  new VueClientPlugin()
+]
 
-let config;
+let config
 const devServer = {
-  port: "8000",
-  host: "0.0.0.0",
+  port: 8002,
+  host: '0.0.0.0',
   overlay: {
-    errors: true,
+    errors: false
   },
-  hot: true,
+  headers: { 'Access-Control-Allow-Origin': '*' },
+  historyApiFallback: {
+    index: '/public/index.html'
+  },
+  hot: true
   // open: true,
   // historyFallback: {}
-};
+}
+console.log('isDev', isDev)
 if (isDev) {
   config = merge(baseConfig, {
-    devtool: "#cheap-module-eval-source-map",
+    devtool: '#cheap-module-eval-source-map',
     module: {
       rules: [
         {
           test: /\.css$/,
           use: [
-            "vue-style-loader",
+            'vue-style-loader',
             {
-              loader: "css-loader",
+              loader: 'css-loader',
               options: {
                 // 开启 CSS Modules
                 modules: true,
                 // 自定义生成的类名
-                localIdentName: "[local]_[hash:base64:8]",
-              },
-            },
-          ],
+                localIdentName: '[local]_[hash:base64:8]'
+              }
+            }
+          ]
         },
         {
           test: /\.styl/,
           use: [
-            "vue-style-loader",
+            'vue-style-loader',
             {
-              loader: "css-loader",
+              loader: 'css-loader',
               options: {
                 modules: {
                   mode: 'local',
                   auto: true,
-                  localIdentName: "[path][name]__[local]--[hash:base64:5]",
-                },
-              },
+                  localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                }
+              }
             },
             {
-              loader: "postcss-loader",
+              loader: 'postcss-loader',
               options: {
-                sourceMap: true,
-              },
+                sourceMap: true
+              }
             },
-            "stylus-loader",
-          ],
-        },
-      ],
+            'stylus-loader'
+          ]
+        }
+      ]
     },
     devServer,
     plugins: defaultPlugin.concat([
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoEmitOnErrorsPlugin(),
-    ]),
-  });
+      new webpack.HotModuleReplacementPlugin()
+      // new webpack.NoEmitOnErrorsPlugin()
+    ])
+  })
 } else {
   config = merge(baseConfig, {
     entry: {
-      app: path.join(__dirname, "../client/index.js"),
-      vendor: ["vue"],
+      app: path.join(__dirname, '../client/client-entry.js'),
+      vendor: ['vue']
     },
     output: {
-      filename: "[name].[hash].js",
+      filename: '[name].[hash].js',
+      publicPath: '/public/'
     },
     module: {
       rules: [
@@ -96,29 +104,35 @@ if (isDev) {
             {
               loader: MiniCssExtractPlugin.loader,
               options: {
-                publicPath: "./",
-                hmr: process.env.NODE_ENV === "development",
-              },
+                publicPath: './',
+                hmr: process.env.NODE_ENV === 'development'
+              }
             },
-            "css-loader",
+            'css-loader',
             {
-              loader: "postcss-loader",
-              options: { sourceMap: true },
+              loader: 'postcss-loader',
+              options: { sourceMap: true }
             },
-            "stylus-loader",
-          ],
-        },
-      ],
+            'stylus-loader'
+          ]
+        }
+      ]
+    },
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      },
+      runtimeChunk: true
     },
     plugins: defaultPlugin.concat([
       // 把css分离成一个文件
       new MiniCssExtractPlugin({
-        filename: "styles.[hash].css",
-        chunkFilename: "[id].css",
-        ignoreOrder: false,
-      }),
-    ]),
-  });
+        filename: 'styles.[hash].css',
+        chunkFilename: '[id].css',
+        ignoreOrder: false
+      })
+    ])
+  })
 }
 
-module.exports = config;
+module.exports = config

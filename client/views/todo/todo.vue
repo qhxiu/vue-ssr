@@ -1,10 +1,15 @@
 <template>
   <section class="real-app">
+    <div class="tab-container">
+      <tabs :value="filter" @change="handleChangeTab">
+        <tab :label="tab" :index="tab" v-for="tab in stats" :key="tab"></tab>
+      </tabs>
+    </div>
     <input
       type="text"
       class="add-input"
       autofocus="autofocus"
-      placeholder="接下去要做什么？"
+      placeholder="接下来要做什么？"
       @keyup.enter="addTodo"
     />
     <item
@@ -13,23 +18,27 @@
       :key="todo.id"
       @deleteTodo="deleteTodo"
     />
-    <tabs :filter="filter" :todos="todos" @toggle="toggleFilter" @clearAllCompleted="clearAllCompleted" />
+    <helper :filter="filter" :todos="todos" @clearAllCompleted="clearAllCompleted" />
   </section>
 </template>
 <script>
 import Item from './item.vue'
-import Tabs from './tabs.vue'
+import Helper from './helper.vue'
 let id = 0
 export default {
+  metaInfo: {
+    title: 'Todo App'
+  },
   data () {
     return {
       todos: [],
-      filter: 'all'
+      filter: 'all',
+      stats: ['all', 'active', 'completed']
     }
   },
   components: {
     Item,
-    Tabs
+    Helper
   },
   computed: {
     filteredTodo () {
@@ -40,9 +49,7 @@ export default {
       return this.todos.filter(todo => todo.completed === completed)
     }
   },
-  created () {
-    console.log(this.$style)
-  },
+  created () {},
   methods: {
     addTodo (e) {
       this.todos.unshift({
@@ -50,6 +57,7 @@ export default {
         content: e.target.value.trim(),
         completed: false
       })
+      console.log('addtodo')
       e.target.value = ''
     },
     deleteTodo (id) {
@@ -58,11 +66,11 @@ export default {
         1
       )
     },
-    toggleFilter (state) {
-      this.filter = state
-    },
     clearAllCompleted () {
       this.todos = this.todos.filter(todo => !todo.completed)
+    },
+    handleChangeTab (value) {
+      this.filter = value
     }
   }
 }
@@ -88,4 +96,7 @@ export default {
     padding 16px 16px 16px 36px
     border none
     box-shadow inset 0 -2px 1px rgba(0, 0, 0, 0.03)
+.tab-container {
+  padding 0 15px
+}
 </style>

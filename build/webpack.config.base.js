@@ -4,11 +4,13 @@ const createVueLoaderOptions = require('./vue-loader.config')
 
 const isDev = process.env.NODE_ENV === 'development'
 const config = {
+  mode: process.env.NODE_ENV || 'production',
   target: 'web',
-  entry: path.join(__dirname, '../client/index.js'),
+  entry: path.join(__dirname, '../client/client-entry.js'),
   output: {
     filename: 'bundle.js',
-    path: path.join(__dirname, '../dist')
+    path: path.join(__dirname, '../public'),
+    publicPath: 'http://127.0.0.1:8002/public/'
   },
   plugins: [new VueLoaderPlugin()],
   module: {
@@ -21,11 +23,18 @@ const config = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
+        options: createVueLoaderOptions(isDev)
       },
       {
         test: /\.jsx$/,
-        loader: 'babel-loader'
+        // loader: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+          // options: {
+          //   presets: ['@babel/preset-react']
+          // }
+        }
       },
       {
         test: /\.js$/,

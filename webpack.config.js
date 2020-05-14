@@ -73,7 +73,7 @@ if (isDev) {
   });
   config.devtool = "#cheap-module-eval-source-map";
   (config.devServer = {
-    port: "8000",
+    port: "8002",
     host: "0.0.0.0",
     overlay: {
       errors: true,
@@ -105,9 +105,9 @@ if (isDev) {
         },
       },
       'css-loader',
-      { 
-        loader: 'postcss-loader', 
-        options: { sourceMap: true } 
+      {
+        loader: 'postcss-loader',
+        options: { sourceMap: true }
       },
       'stylus-loader'
     ]
@@ -117,7 +117,7 @@ if (isDev) {
     new MiniCssExtractPlugin({
       filename: 'styles.[hash:8].[name].css',
       chunkFilename: '[id].css',
-      ignoreOrder: false, 
+      ignoreOrder: false,
     }),
   )
 }

@@ -4,5 +4,8 @@
   "parserOptions": {
     "parser": "babel-eslint"
   },
-  "parser": "vue-eslint-parser"
+  "parser": "vue-eslint-parser",
+  "rules": {
+    "no-new": "off"
+  }
 }

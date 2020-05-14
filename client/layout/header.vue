@@ -10,7 +10,7 @@ export default {
   }
 }
 </script>
-<style lang="stylus" module>
+<style lang="stylus" scoped>
   .mainheader
     text-align center
     h1

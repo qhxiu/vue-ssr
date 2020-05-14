@@ -1,25 +1,11 @@
 <template>
   <div class="helper">
     <span class="left">{{unFinishedTodoLength}} items left</span>
-    <span class="tabs">
-      <span
-        v-for="state in states"
-        :key="state"
-        :class="[state, filter === state ? 'actived' : '']"
-        @click="toggleFilter(state)"
-        >{{ state }}</span
-      >
-    </span>
     <span class="clear" @click="clickCompleted">Clear Completed</span>
   </div>
 </template>
 <script>
 export default {
-  data () {
-    return {
-      states: ['all', 'active', 'completed']
-    }
-  },
   props: {
     filter: {
       type: String,
@@ -38,9 +24,6 @@ export default {
     }
   },
   methods: {
-    toggleFilter (state) {
-      this.$emit('toggle', state)
-    },
     clickCompleted () {
       this.$emit('clearAllCompleted')
     }
