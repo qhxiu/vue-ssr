@@ -30,6 +30,10 @@ const devServer = {
   historyApiFallback: {
     index: '/public/index.html'
   },
+  proxy: {
+    '/api': 'http://127.0.0.1:3332/',
+    '/user': 'http://127.0.0.1:3332/'
+  },
   hot: true
   // open: true,
   // historyFallback: {}
@@ -133,6 +137,12 @@ if (isDev) {
       })
     ])
   })
+}
+
+config.resolve = {
+  alias: {
+    model: path.join(__dirname, '../client/model/client-model.js')
+  }
 }
 
 module.exports = config

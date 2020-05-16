@@ -1,0 +1,8 @@
+apps:
+  - script: ./server/server.js
+    name: vue-to
+    # env_production 表示服务启动的时候会作为环境变量传进去
+    env_production:
+      NODE_ENV: production
+      HOST: localhost
+      PORT: 8887

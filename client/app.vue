@@ -5,7 +5,7 @@
     <transition name="fade">
       <router-view></router-view>
     </transition>
-    <button @click="notify"></button>
+    <!-- <button @click="notify"></button> -->
     <!-- <notification content="test notification"/> -->
     <Footer></Footer>
   </div>
@@ -33,8 +33,6 @@ export default {
   },
   methods: {
     notify () {
-      // eslint-disable-next-line no-debugger
-      debugger
       this.$notify({
         content: 'test $notify',
         btn: 'close'

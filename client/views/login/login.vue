@@ -1,20 +1,52 @@
 <template>
-  <div>这是一个登录页</div>
+  <form class="login-form" @submit="doSubmit">
+    <h1>
+      <span>Login</span>
+      <span class="error-msg" v-show="errMsg">{{errMsg}}</span>
+    </h1>
+    <input type="text" class="login-input" placeholder="User Name" v-model="username" />
+    <input type="password" class="login-input" placeholder="Password" v-model="password" >
+    <button type="submit" class="login-btn">登 录</button>
+  </form>
 </template>
 
 <script>
-
+import { mapActions } from 'vuex'
 export default {
   metaInfo: {
     title: 'Login Page'
   },
   data () {
     return {
-
+      username: '',
+      password: '',
+      errMsg: ''
     }
   },
   methods: {
-
+    ...mapActions(['login']),
+    doSubmit (e) {
+      e.preventDefault()
+      if (this.validate()) {
+        // 调用接口
+        this.login({
+          username: this.username,
+          password: this.password
+        }).then(() => {})
+      }
+    },
+    validate () {
+      if (!this.username.trim()) {
+        this.errMsg = '姓名不能为空'
+        return false
+      }
+      if (!this.password.trim()) {
+        this.errMsg = '密码不能为空'
+        return false
+      }
+      this.errMsg = ''
+      return true
+    }
   }
 }
 </script>
@@ -40,6 +72,7 @@ export default {
   width 100%
   border-radius 0
   box-shadow 0 0 0
+  box-sizing border-box
 .login-btn
   appearance none
   width 100%

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { createError } from './util'
 
+// 给自己的服务发请求，所以不需要指定host和端口号
 const request = axios.create({
   baseURL: '/'
 })
@@ -18,7 +19,6 @@ const handleRequest = (request) => {
       resolve(data.data)
     }).catch(err => {
       const resp = err.response
-      console.log('---------------', resp)
       if (resp.status === 401) {
         reject(createError(401, 'need auth'))
       }

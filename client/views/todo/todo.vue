@@ -10,28 +10,28 @@
       class="add-input"
       autofocus="autofocus"
       placeholder="接下来要做什么？"
-      @keyup.enter="addTodo"
+      @keyup.enter="handleAdd"
     />
     <item
       :todo="todo"
       v-for="todo in filteredTodo"
       :key="todo.id"
       @deleteTodo="deleteTodo"
+      @toggle="toggleTodoState"
     />
     <helper :filter="filter" :todos="todos" @clearAllCompleted="clearAllCompleted" />
   </section>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 import Item from './item.vue'
 import Helper from './helper.vue'
-let id = 0
 export default {
   metaInfo: {
     title: 'Todo App'
   },
   data () {
     return {
-      todos: [],
       filter: 'all',
       stats: ['all', 'active', 'completed']
     }
@@ -41,6 +41,7 @@ export default {
     Helper
   },
   computed: {
+    ...mapState(['todos']),
     filteredTodo () {
       if (this.filter === 'all') {
         return this.todos
@@ -49,28 +50,49 @@ export default {
       return this.todos.filter(todo => todo.completed === completed)
     }
   },
+  // asyncData在vue里不会被执行
+  asyncData ({ store, router }) {
+    if (store.state.user) {
+      return store.dispatch('fetchTodos')
+    }
+    router.replace('/login')
+    return Promise.resolve()
+  },
+  mounted () {
+    this.fetchTodos()
+  },
   created () {},
   methods: {
-    addTodo (e) {
-      this.todos.unshift({
-        id: id++,
-        content: e.target.value.trim(),
+    ...mapActions(['fetchTodos', 'addTodo', 'deleteTodo', 'updateTodo', 'deleteAllCompleted']),
+    handleAdd (e) {
+      const content = e.target.value.trim()
+      if (!content) {
+        this.$notify({
+          content: '必须输入要做的内容'
+        })
+        return
+      }
+      const todo = {
+        content,
         completed: false
-      })
-      console.log('addtodo')
+      }
+      this.addTodo(todo)
       e.target.value = ''
     },
-    deleteTodo (id) {
-      this.todos.splice(
-        this.todos.findIndex((item) => item.id === id),
-        1
-      )
-    },
     clearAllCompleted () {
-      this.todos = this.todos.filter(todo => !todo.completed)
+      // this.todos = this.todos.filter(todo => !todo.completed)
+      this.deleteAllCompleted()
     },
     handleChangeTab (value) {
       this.filter = value
+    },
+    toggleTodoState (todo) {
+      this.updateTodo({
+        id: todo.id,
+        todo: Object.assign({}, todo, {
+          completed: !todo.completed
+        })
+      })
     }
   }
 }

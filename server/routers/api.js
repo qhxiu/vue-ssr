@@ -2,6 +2,16 @@ const Router = require('koa-router')
 
 const apiRouter = new Router({ prefix: '/api' })
 
+const validateUser = async (ctx, next) => {
+  if (!ctx.session.user) {
+    ctx.status = 401
+    ctx.body = 'need login'
+  } else {
+    await next()
+  }
+}
+// 每个请求都验证
+apiRouter.use(validateUser)
 const successResponse = (data) => {
   return {
     success: true,
@@ -9,7 +19,7 @@ const successResponse = (data) => {
   }
 }
 
-apiRouter.get('/todos', async (ctx) => {
+apiRouter.get('/todos', validateUser, async (ctx) => {
   const todos = await ctx.db.getAllTodos()
   ctx.body = successResponse(todos)
 }).post('/todo', async (ctx) => {
