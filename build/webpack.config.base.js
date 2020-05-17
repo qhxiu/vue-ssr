@@ -8,7 +8,7 @@ const config = {
   target: 'web',
   entry: path.join(__dirname, '../client/client-entry.js'),
   output: {
-    filename: 'bundle.js',
+    filename: 'bundle.[hash:8].js',
     path: path.join(__dirname, '../public'),
     publicPath: 'http://127.0.0.1:8002/public/'
   },
@@ -28,13 +28,7 @@ const config = {
       },
       {
         test: /\.jsx$/,
-        // loader: 'babel-loader',
-        use: {
-          loader: 'babel-loader',
-          // options: {
-          //   presets: ['@babel/preset-react']
-          // }
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.js$/,

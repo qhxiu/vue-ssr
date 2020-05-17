@@ -20,13 +20,14 @@ const config = merge(baseConfig, {
       {
         test: /\.styl/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: './',
-              hmr: process.env.NODE_ENV === 'development'
-            }
-          },
+          // {
+          //   loader: MiniCssExtractPlugin.loader,
+          //   options: {
+          //     publicPath: './',
+          //     hmr: process.env.NODE_ENV === 'development'
+          //   }
+          // },
+          'vue-style-loader',
           'css-loader',
           {
             loader: 'postcss-loader',
@@ -39,9 +40,7 @@ const config = merge(baseConfig, {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'styles.[hash].css',
-      chunkFilename: '[id].css',
-      ignoreOrder: false
+      filename: 'styles.[hash:8].css'
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),

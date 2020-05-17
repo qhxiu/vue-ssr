@@ -45,34 +45,10 @@ if (isDev) {
     module: {
       rules: [
         {
-          test: /\.css$/,
-          use: [
-            'vue-style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                // 开启 CSS Modules
-                modules: true,
-                // 自定义生成的类名
-                localIdentName: '[local]_[hash:base64:8]'
-              }
-            }
-          ]
-        },
-        {
           test: /\.styl/,
           use: [
             'vue-style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                modules: {
-                  mode: 'local',
-                  auto: true,
-                  localIdentName: '[path][name]__[local]--[hash:base64:5]'
-                }
-              }
-            },
+            'css-loader',
             {
               loader: 'postcss-loader',
               options: {
@@ -97,7 +73,7 @@ if (isDev) {
       vendor: ['vue']
     },
     output: {
-      filename: '[name].[hash].js',
+      filename: '[name].[chunkhash:8].js',
       publicPath: '/public/'
     },
     module: {
@@ -105,13 +81,7 @@ if (isDev) {
         {
           test: /\.styl/,
           use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-              options: {
-                publicPath: './',
-                hmr: process.env.NODE_ENV === 'development'
-              }
-            },
+            MiniCssExtractPlugin.loader,
             'css-loader',
             {
               loader: 'postcss-loader',
@@ -131,9 +101,7 @@ if (isDev) {
     plugins: defaultPlugin.concat([
       // 把css分离成一个文件
       new MiniCssExtractPlugin({
-        filename: 'styles.[hash].css',
-        chunkFilename: '[id].css',
-        ignoreOrder: false
+        filename: '[name]-styles.[hash:8].css'
       })
     ])
   })

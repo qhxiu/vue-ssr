@@ -21,7 +21,6 @@ export default context => {
           })
         }
       })).then(data => {
-        console.log(store.state)
         context.meta = app.$meta()
         resolve(app)
       })
