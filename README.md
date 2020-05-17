@@ -36,4 +36,17 @@
 
 5. `Client Bundle` -> `build/webpack.config.client.js`
 
-   
+### 使用方法
+
+安装依赖
+
+```
+npm i
+```
+
+运行
+
+```
+npm run dev
+```
+
