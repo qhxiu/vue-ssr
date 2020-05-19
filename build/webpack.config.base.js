@@ -40,7 +40,20 @@ const config = {
         }
       },
       {
-        test: /\.(gif|jpg|jpeg|png|svg)$/,
+        test: /\.css/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(gif|jpg|jpeg|png|svg|ttf|woff)$/,
         use: [
           {
             loader: 'url-loader',

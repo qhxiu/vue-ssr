@@ -38,7 +38,6 @@ const devServer = {
   // open: true,
   // historyFallback: {}
 }
-console.log('isDev', isDev)
 if (isDev) {
   config = merge(baseConfig, {
     devtool: '#cheap-module-eval-source-map',

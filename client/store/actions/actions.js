@@ -14,14 +14,6 @@ const handleError = (err) => {
 }
 
 export default {
-  // updateCountAsync (store, data) {
-  //   // console.log('asdasd')
-  //   setTimeout(() => {
-  //     store.commit('updateCount', {
-  //       num: data.num
-  //     })
-  //   }, data.time)
-  // },
   fetchTodos ({ commit }) {
     commit('startLoading')
     return model.getAllTodos()

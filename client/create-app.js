@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import Meta from 'vue-meta'
 
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
 import App from './app.vue'
 import createStore from './store/store'
 import createRouter from './config/router'
@@ -18,6 +21,7 @@ Vue.use(Meta)
 // debugger
 Vue.use(Notification)
 Vue.use(Tabs)
+Vue.use(ElementUI)
 
 export default () => {
   const router = createRouter()

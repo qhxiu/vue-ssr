@@ -26,7 +26,6 @@ const isDev = process.env.NODE_ENV === 'development'
 
 app.use(async (ctx, next) => {
   try {
-    console.log(`request with path ${ctx.path}`)
     await next()
   } catch (err) {
     ctx.status = 500

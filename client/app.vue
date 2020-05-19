@@ -28,7 +28,8 @@ export default {
   data () {
     return {}
   },
-  mounted () {
+  mounted () {},
+  created () {
 
   },
   methods: {

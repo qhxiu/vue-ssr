@@ -22,7 +22,6 @@ export default {
   //   }
   // },
   render () {
-    console.log(this.panes)
     return (
       <div class="tabs">
         <ul class="tabs-header">{this.$slots.default}</ul>
