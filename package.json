@@ -22,7 +22,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "ejs": "^3.0.2",
     "element-ui": "^2.13.2",
     "koa": "^2.11.0",
